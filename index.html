@@ -6,353 +6,348 @@
     <title>辛普森風格：法案大冒險</title>
     <style>
         :root {
-            --simpson-yellow: #FFD90F;
-            --simpson-blue: #74D7EE; /* 天空藍 */
-            --simpson-white: #FFFFFF;
-            --text-color: #222;
-            --accent-red: #FF4136;
+            --simpson-yellow: #FED90F; /* 經典皮膚黃 */
+            --simpson-blue: #56B4D3;   /* 片頭天空藍 */
+            --donut-pink: #D55179;     /* 甜甜圈粉紅 */
+            --nuclear-green: #70C125;  /* 核能螢光綠 */
+            --wall-color: #F4E3B1;     /* 卡通室內牆壁色 */
         }
 
         body {
-            font-family: 'Comic Sans MS', '微軟正黑體', sans-serif; /* 使用較輕鬆的字體 */
+            /* 使用 Arial Black 或 Impact 來模擬卡通粗體 */
+            font-family: 'Arial Black', 'Impact', '微軟正黑體', sans-serif;
             background-color: var(--simpson-blue);
-            background-image: radial-gradient(white 15%, transparent 16%),
-                              radial-gradient(white 15%, transparent 16%); 
-            background-size: 60px 60px; /* 模擬雲朵感覺 */
+            /* 簡易的卡通雲朵背景 */
+            background-image: 
+                radial-gradient(circle at 20% 20%, white 40px, transparent 42%),
+                radial-gradient(circle at 80% 80%, white 60px, transparent 62%);
+            background-size: 300px 300px;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            color: var(--text-color);
+            min-height: 100vh;
+            color: black;
         }
 
-        /* 投影卡片 */
+        /* 投影卡片容器 - 有點歪歪扭扭的手繪感 */
         .slide-container {
-            width: 90%;
-            max-width: 1000px;
-            height: 90vh;
-            background: var(--simpson-white);
-            border: 8px solid black; /* 卡通描邊風格 */
-            border-radius: 20px;
-            box-shadow: 15px 15px 0px rgba(0,0,0,0.2);
+            width: 95%;
+            max-width: 1100px;
+            height: 85vh;
+            background: var(--wall-color);
+            border: 8px solid black; /* 超粗黑框 */
+            /* 稍微不規則的圓角 */
+            border-radius: 30px 50px 30px 40px;
+            /* 硬邊陰影，不暈開 */
+            box-shadow: 15px 15px 0px black;
             position: relative;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* 進度條 */
-        .progress-bar {
-            height: 15px;
-            background: #eee;
-            border-bottom: 4px solid black;
+        /* 進度條 - 模擬核能棒發光 */
+        .progress-container {
+            height: 25px;
+            background: #333;
+            border-bottom: 5px solid black;
+            padding: 5px;
         }
         .progress-fill {
             height: 100%;
-            background: var(--simpson-yellow);
+            background: var(--nuclear-green);
             width: 0%;
             transition: width 0.3s;
+            border-radius: 10px;
+            border: 3px solid black;
+            box-shadow: inset 0 0 10px yellow; /* 發光效果 */
         }
 
         /* 內容區 */
         .slide {
             flex: 1;
-            padding: 30px 50px;
+            padding: 30px 60px;
             display: none;
             flex-direction: column;
             align-items: center;
             text-align: center;
             overflow-y: auto;
-            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 彈跳動畫 */
+            /* 切換時的彈跳動畫 */
+            animation: bounceIn 0.5s;
         }
 
         .slide.active {
             display: flex;
         }
 
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            70% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
-        /* 放大字體 */
-        h1 { font-size: 3.5em; margin: 10px 0; color: black; text-shadow: 2px 2px 0px var(--simpson-yellow); }
-        h2 { font-size: 2.8em; margin: 10px 0; color: #333; }
-        p { font-size: 1.6em; line-height: 1.5; margin: 15px 0; font-weight: bold; }
-        li { font-size: 1.4em; margin: 10px 0; text-align: left; }
-
-        /* 重點方塊 */
-        .highlight-box {
-            background: var(--simpson-yellow);
-            border: 4px solid black;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
-            width: 80%;
-            box-shadow: 5px 5px 0px black;
-            transform: rotate(-1deg); /* 稍微歪斜增加卡通感 */
+        /* 超大字體與描邊效果 */
+        h1 { 
+            font-size: 4em; 
+            margin: 15px 0; 
+            color: var(--simpson-yellow);
+            /* 文字黑框描邊技術 */
+            text-shadow: 
+                -3px -3px 0 #000,  
+                 3px -3px 0 #000,
+                -3px  3px 0 #000,
+                 3px  3px 0 #000,
+                 8px  8px 0 rgba(0,0,0,0.3); /* 陰影 */
+            letter-spacing: 2px;
         }
 
-        /* 角色頭像 (CSS Art) */
-        .avatar-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
+        h2 { 
+            font-size: 3.2em; 
+            margin: 15px 0; 
+            color: black;
+            text-shadow: 3px 3px 0 white;
         }
 
-        .simpson-head {
-            width: 100px;
-            height: 100px;
-            background: var(--simpson-yellow);
-            border: 4px solid black;
-            border-radius: 50%;
-            position: relative;
-            flex-shrink: 0;
-        }
-        
-        /* 眼睛 */
-        .simpson-head::before, .simpson-head::after {
-            content: '';
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            background: white;
-            border: 3px solid black;
-            border-radius: 50%;
-            top: 30px;
-        }
-        .simpson-head::before { left: 15px; }
-        .simpson-head::after { right: 15px; }
-
-        /* 瞳孔 */
-        .pupil-l, .pupil-r {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: black;
-            border-radius: 50%;
-            top: 42px;
-            z-index: 2;
-        }
-        .pupil-l { left: 28px; }
-        .pupil-r { right: 28px; }
-
-        /* 角色特徵 */
-        /* 屁孩 (Spikes) */
-        .kid .simpson-head { border-top: 0; border-radius: 0 0 50px 50px; height: 80px; top: 20px; }
-        .kid-hair {
-            position: absolute; top: -20px; left: -4px; width: 108px; height: 30px;
-            background: var(--simpson-yellow); 
-            clip-path: polygon(0% 100%, 10% 0%, 20% 100%, 30% 0%, 40% 100%, 50% 0%, 60% 100%, 70% 0%, 80% 100%, 90% 0%, 100% 100%);
-            border: 4px solid black; border-bottom: none;
+        p, li, td, th { 
+            font-size: 1.8em; /* 內文非常大 */
+            line-height: 1.4; 
+            margin: 15px 0; 
+            font-weight: bold;
         }
 
-        /* 老爸 (Bald) */
-        .dad .mouth {
-            position: absolute; bottom: 20px; left: 30px; width: 40px; height: 20px;
-            border: 3px solid #D1B06B; border-radius: 20px; background: #D1B06B; opacity: 0.5;
-        }
-        
-        /* 資優生 (Smart) */
-        .smart .simpson-head::before, .smart .simpson-head::after { border-radius: 0; border: 3px solid black; width: 35px; height: 35px; } /* 眼鏡 */
-
-        /* 對話框 */
+        /* 卡通對話框 */
         .speech-bubble {
             background: white;
-            border: 3px solid black;
-            border-radius: 20px;
-            padding: 15px;
+            border: 5px solid black;
+            border-radius: 30px;
+            padding: 20px 30px;
             position: relative;
-            font-size: 1.2em;
+            font-size: 1.8em;
             display: inline-block;
-            max-width: 600px;
-            box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin-bottom: 30px;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.2);
+        }
+        /* 對話框的小尾巴 */
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50px;
+            border-width: 20px 20px 0;
+            border-style: solid;
+            border-color: black transparent;
+            display: block;
+            width: 0;
+        }
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -13px;
+            left: 55px;
+            border-width: 15px 15px 0;
+            border-style: solid;
+            border-color: white transparent;
+            display: block;
+            width: 0;
+            z-index: 1;
         }
 
-        /* 控制按鈕 */
+        /* 重點方塊 - 甜甜圈風格 */
+        .highlight-box {
+            background: var(--donut-pink);
+            color: white;
+            border: 5px solid black;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            width: 80%;
+            box-shadow: 8px 8px 0 black;
+            text-shadow: 2px 2px 0 black;
+            position: relative;
+        }
+        /* 灑上糖粉的效果 */
+        .highlight-box::before {
+            content: ' ';
+            position: absolute; top: 10px; left: 20px; width: 10px; height: 5px; background: yellow; border: 2px solid black; transform: rotate(20deg);
+            box-shadow: 20px 10px 0 var(--nuclear-green), 50px -5px 0 cyan;
+        }
+
+
+        /* 控制按鈕 - 甜甜圈按鈕 */
         .controls {
             padding: 20px;
             display: flex;
             justify-content: space-between;
             background: var(--simpson-yellow);
-            border-top: 4px solid black;
+            border-top: 6px solid black;
+            align-items: center;
         }
 
         button {
-            background: var(--simpson-blue);
-            color: black;
-            border: 3px solid black;
-            padding: 15px 40px;
-            font-size: 1.5em;
+            background: var(--donut-pink);
+            color: white;
+            border: 4px solid black;
+            padding: 15px 30px;
+            font-size: 1.8em;
+            font-family: inherit;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 3px 3px 0px black;
-            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow: 5px 5px 0px black;
+            text-shadow: 2px 2px 0 black;
+            transition: all 0.1s;
         }
 
-        button:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px black; }
-        button:disabled { background: #ccc; cursor: not-allowed; opacity: 0.5; }
+        button:active { transform: translate(5px, 5px); box-shadow: 0px 0px 0px black; }
+        button:disabled { background: #999; cursor: not-allowed; opacity: 0.7; box-shadow: none; }
 
-        .big-emoji { font-size: 3em; display: block; margin-bottom: 10px; }
+        .emoji-icon { font-size: 5em; margin-bottom: 20px; display: block; filter: drop-shadow(5px 5px 0 black); }
 
+        /* 表格風格 */
+        .cartoon-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 5px;
+            background: black; /* 表格縫隙是黑色的 */
+        }
+        .cartoon-table th, .cartoon-table td {
+            border: 4px solid black;
+            padding: 15px;
+            background: white;
+        }
+        .cartoon-table th { background: var(--simpson-yellow); }
     </style>
 </head>
 <body>
 
 <div class="slide-container">
-    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+    <div class="progress-container"><div class="progress-fill" id="progress"></div></div>
 
     <div class="slide active">
-        <div class="avatar-container kid">
-            <div class="kid-hair"></div>
-            <div class="simpson-head">
-                <div class="pupil-l"></div><div class="pupil-r"></div>
-            </div>
-        </div>
         <h1>🍩 公民課：法案大冒險</h1>
+        <span class="emoji-icon">🏫</span>
         <div class="speech-bubble">
-            「嘿！如果我想要<strong>珍珠奶茶半價</strong>，要怎麼立法？」
+            「D'oh! 我想要珍珠奶茶半價！要怎麼立法？」
         </div>
-        <p>今天我們用「辛普森風格」帶你跑一次立法院！</p>
-        <p style="color:red; font-size:1.2em;">(按下一頁開始)</p>
+        <p>今天用「最美國的卡通風格」，帶你跑一次立法院流程！</p>
+        <p style="color:var(--donut-pink); text-shadow: 2px 2px 0 black;">(按右下角的按鈕開始囉！)</p>
     </div>
 
     <div class="slide">
-        <span class="big-emoji">🥤+💰=⬇️</span>
         <h2>案例：飲料半價法案</h2>
+        <span class="emoji-icon">🥤➕💰 ➡️ ⬇️</span>
         <div class="highlight-box">
-            <p><strong>第一條：</strong> 全國高中生買手搖飲，一律半價。</p>
-            <p><strong>第二條：</strong> 錢由教育部出。</p>
+            <p><strong>第 1 條：</strong> 全國高中生買手搖飲，一律半價。</p>
+            <p><strong>第 2 條：</strong> 錢由教育部出。</p>
         </div>
-        <p>聽起來很棒？但要變成法律，有很多關卡要過！</p>
+        <p>聽起來很棒？但要變成真正的法律，沒那麼簡單！</p>
     </div>
 
     <div class="slide">
         <h2>第一關：提案 & 程序委員會</h2>
-        <div class="avatar-container dad">
-            <div class="simpson-head">
-                <div class="pupil-l"></div><div class="pupil-r"></div><div class="mouth"></div>
-            </div>
+        <span class="emoji-icon">🛋️📺</span>
+        <div class="speech-bubble" style="border-color: var(--simpson-yellow);">
+            懶惰立委：「我想提這個案，但我一個人不夠力...」
         </div>
-        <div class="speech-bubble">
-            懶惰老爸立委：「我想提這個案，但我一個人不夠力...」
+        <div style="background: white; border: 5px solid black; padding: 20px; margin-top: 20px; text-align: left; border-radius: 20px;">
+            <p>👉 <strong>連署 (Co-signing)</strong>：立委需要找 <strong>15個朋友</strong> 簽名才算數。</p>
+            <p>👉 <strong>程序委員會</strong>：立法院的警衛。如果覺得這個案子太瞎，可能直接擋在門外。</p>
         </div>
-        <ul style="text-align: left; background: white; padding: 20px; border: 3px solid black; border-radius: 10px; margin-top:20px;">
-            <li>👉 <strong>連署 (Co-signing)</strong>：立委提案需要找 <strong>15個朋友</strong> 簽名才算數。</li>
-            <li>👉 <strong>程序委員會</strong>：他們是門神。如果覺得這個案子太瞎（比如會讓國家破產），可能在這裡就把它丟進垃圾桶。</li>
-        </ul>
     </div>
 
     <div class="slide">
         <h2>第二關：委員會大戰</h2>
-        <div class="avatar-container smart">
-            <div class="simpson-head">
-                <div class="pupil-l"></div><div class="pupil-r"></div>
-            </div>
-        </div>
+        <span class="emoji-icon">🗣️💥🗯️</span>
         <div class="speech-bubble">
-            資優生：「教育部說沒錢啦！我們來<strong>協商</strong>一下。」
+            資優生：「教育部說沒錢啦！需要<strong>協商</strong>一下。」
         </div>
-        <p>法案進入「教育文化委員會」。</p>
-        <p>這裡會進行實質審查、吵架、還有<strong>「黨團協商」</strong>。</p>
-        <div class="highlight-box" style="background: white;">
-            <strong>最後妥協版：</strong><br>
-            只有「每個禮拜五」半價。 (好過沒有嘛！)
+        <p>法案送去「教育文化委員會」審查。</p>
+        <div class="highlight-box" style="background: var(--nuclear-green); color: black; text-shadow: none;">
+            <strong style="font-size:1.2em;">☢️ 黨團協商結果：</strong><br>
+            最後妥協改成「每週五限定」半價。(好過沒有嘛！)
         </div>
     </div>
 
     <div class="slide">
-        <span class="big-emoji">🔨 🎉</span>
         <h2>第三關：三讀敲槌</h2>
-        <p><strong>二讀：</strong> 在立法院大會一條一條唸、表決。(最關鍵)</p>
+        <span class="emoji-icon">⚖️🔨</span>
+        <p><strong>二讀：</strong> 在大會一條一條唸、表決 (最關鍵)。</p>
         <p><strong>三讀：</strong> 只能改錯字，全體最後投票。</p>
-        <h3 style="color:var(--accent-red); font-size: 2.5em; transform: rotate(-5deg);">通過啦！！</h3>
-        <p>但這還不是結束... 大魔王在後面。</p>
+        <h1 style="color:var(--nuclear-green); transform: rotate(-5deg); font-size: 5em;">通過啦！！🎉</h1>
+        <p>但遊戲還沒結束... 大魔王在後面。</p>
     </div>
 
     <div class="slide">
-        <h2>⚠️ 關鍵知識：副署 (Countersignature)</h2>
-        <p>法案送給總統公布時，需要另一個人簽名。</p>
-        <div class="highlight-box">
-            <p><strong>憲法規定：</strong></p>
-            <p>總統公布法律，須經 <strong>行政院院長</strong> 之副署。</p>
+        <h2 style="background: var(--simpson-yellow); border:4px solid black; padding: 10px;">⚠️ 關鍵知識：副署 (Countersignature)</h2>
+        <span class="emoji-icon">✍️📜</span>
+        <p>法案通過後，要給總統公布。但憲法規定：</p>
+        <div class="speech-bubble" style="max-width: 800px;">
+            「總統公布法律...須經 <strong>行政院院長</strong> 之副署。」
         </div>
-        <div class="avatar-container kid">
-             <div class="kid-hair"></div>
-             <div class="simpson-head"><div class="pupil-l"></div><div class="pupil-r"></div></div>
-        </div>
-        <div class="speech-bubble">
-            屁孩問：「那如果院長不爽簽，會怎樣？」
-        </div>
+        <p>也就是院長也要簽名負責的意思！</p>
     </div>
 
     <div class="slide">
-        <h2 style="color: var(--accent-red)">🔥 狀況題：如果拒絕副署？</h2>
-        <p>假設行政院長覺得「飲料法」太荒謬，拒絕簽名。</p>
+        <h2 style="color: var(--donut-pink); text-shadow: 3px 3px 0 black;">🔥 狀況題：如果拒絕副署？</h2>
+        <span class="emoji-icon">😡🚫</span>
+        <p>假設行政院長不想簽這個「飲料法」，會怎樣？</p>
         
-        <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
-            <div style="background:white; border:3px solid black; padding:15px; width:40%;">
+        <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; margin-top:20px;">
+            <div style="background:white; border:5px solid black; padding:15px; width:40%; box-shadow: 8px 8px 0 var(--donut-pink);">
                 <h3>1. 法律無效</h3>
-                <p>就像考卷沒有家長簽名，不算數！</p>
+                <p>就像考卷沒家長簽名，不算數！</p>
             </div>
-            <div style="background:white; border:3px solid black; padding:15px; width:40%;">
+            <div style="background:white; border:5px solid black; padding:15px; width:40%; box-shadow: 8px 8px 0 var(--donut-pink);">
                 <h3>2. 政治風暴</h3>
-                <p>院長不聽話？通常代表他要<strong>辭職下台</strong>了。</p>
+                <p>院長抗命？通常代表要<strong>辭職下台</strong>了。</p>
             </div>
         </div>
         
-        <p style="margin-top:20px;">
-            唯一解法是<strong>「覆議」</strong>：<br>
-            院長把案子退回立法院說「你們重想一下啦！」<br>
-            如果立法院還是堅持要過，院長就<strong>必須接受並簽名</strong> (不然就辭職)。
+        <p style="margin-top:30px; background: var(--simpson-yellow); border: 4px solid black; padding: 10px; display: inline-block;">
+            唯一解法：提<strong>「覆議」</strong>(退回重審)。<br>如果立法院堅持不改，院長就必須簽名 (或辭職)。
         </p>
     </div>
 
     <div class="slide">
-        <h2>🧐 超級比一比：連署 vs 副署</h2>
-        <p>這兩個很容易搞混！看這裡！</p>
-        <table style="width:100%; font-size:1.2em; border-collapse: collapse; background:white;">
-            <tr style="background:black; color:white;">
-                <th style="padding:15px;">項目</th>
-                <th style="padding:15px; background:var(--simpson-yellow); color:black;">連署 (Co-sign)</th>
-                <th style="padding:15px; background:var(--simpson-blue); color:black;">副署 (Counter-sign)</th>
+        <h2>🧐 超級比一比</h2>
+        <table class="cartoon-table">
+            <tr>
+                <th>項目</th>
+                <th style="background:var(--simpson-yellow);">連署 (Co-sign)</th>
+                <th style="background:var(--donut-pink); color:white; text-shadow: 2px 2px 0 black;">副署 (Counter-sign)</th>
             </tr>
             <tr>
-                <td style="border:2px solid black; padding:10px;">什麼時候？</td>
-                <td style="border:2px solid black; padding:10px;"><strong>一開始</strong> (提案時)</td>
-                <td style="border:2px solid black; padding:10px;"><strong>最後面</strong> (公布時)</td>
+                <td><strong>時間點</strong></td>
+                <td><strong>一開始</strong> (提案時)</td>
+                <td><strong>最後面</strong> (公布時)</td>
             </tr>
             <tr>
-                <td style="border:2px solid black; padding:10px;">誰要做？</td>
-                <td style="border:2px solid black; padding:10px;">立法委員</td>
-                <td style="border:2px solid black; padding:10px;">行政院長</td>
+                <td><strong>誰要做？</strong></td>
+                <td>立法委員</td>
+                <td>行政院長</td>
             </tr>
             <tr>
-                <td style="border:2px solid black; padding:10px;">目的是？</td>
-                <td style="border:2px solid black; padding:10px;">湊人數成案</td>
-                <td style="border:2px solid black; padding:10px;">負責 & 確認</td>
+                <td><strong>目的是？</strong></td>
+                <td>湊人數成案</td>
+                <td>負責 & 確認</td>
             </tr>
         </table>
     </div>
 
     <div class="slide">
-        <div class="avatar-container kid">
-             <div class="kid-hair"></div>
-             <div class="simpson-head"><div class="pupil-l"></div><div class="pupil-r"></div></div>
-        </div>
-        <h1>🎉 下課啦！</h1>
+        <h1>🎉 下課啦！Woo-hoo!</h1>
+        <span class="emoji-icon">🍩🧘‍♂️📺</span>
         <p>恭喜你搞懂了立法程序！</p>
-        <p>現在你知道，一杯半價珍奶的背後，<br>有多少政治角力了吧？</p>
-        <button onclick="location.reload()" style="background:var(--simpson-yellow);">🍩 再玩一次</button>
+        <p>現在你知道，一杯半價珍奶的背後，有多少政治角力了吧？</p>
+        <button onclick="location.reload()" style="background:var(--nuclear-green); color:black; text-shadow:none; font-size: 2.5em;">🔄 再玩一次</button>
     </div>
 
     <div class="controls">
         <button id="prevBtn" onclick="changeSlide(-1)">⬅️ 上一頁</button>
-        <span id="page-indicator" style="align-self: center; font-size: 1.5em; font-weight: bold;">1 / 9</span>
+        <span id="page-indicator" style="font-size: 2.5em; font-weight: bold; color: black; text-shadow: 2px 2px 0 white;">1 / 9</span>
         <button id="nextBtn" onclick="changeSlide(1)">下一頁 ➡️</button>
     </div>
 </div>
@@ -381,10 +376,12 @@
 
         prevBtn.disabled = currentSlide === 0;
         if (currentSlide === totalSlides - 1) {
-            nextBtn.innerText = "完成 🎉";
+            nextBtn.innerText = "完成! Hoo!";
+            nextBtn.style.backgroundColor = "var(--nuclear-green)";
             nextBtn.onclick = () => location.reload();
         } else {
             nextBtn.innerText = "下一頁 ➡️";
+            nextBtn.style.backgroundColor = "var(--donut-pink)";
             nextBtn.onclick = () => changeSlide(1);
             nextBtn.disabled = false;
         }

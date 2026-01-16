@@ -3,397 +3,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>法案大冒險：立法院通關傳說</title>
+    <title>公民法案教室：投影片互動版</title>
     <style>
         :root {
-            --primary-color: #FF6B6B; /* 卡通紅 */
-            --secondary-color: #4ECDC4; /* 卡通綠 */
-            --accent-color: #FFE66D; /* 卡通黃 */
-            --dark-text: #2C3E50;
-            --light-bg: #F7F9FC;
+            --primary: #FF6B6B;       /* 活力紅 */
+            --secondary: #4ECDC4;     /* 清新綠 */
+            --accent: #FFE66D;        /* 亮眼黃 */
+            --dark: #292f36;          /* 深灰字 */
+            --light: #f7fff7;         /* 背景白 */
         }
 
         body {
             font-family: '微軟正黑體', 'Microsoft JhengHei', sans-serif;
-            background-color: var(--light-bg);
-            background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
-            background-size: 20px 20px;
+            background-color: #eee;
             margin: 0;
             padding: 0;
-            color: var(--dark-text);
-            line-height: 1.6;
-        }
-
-        /* 標題區 */
-        header {
-            background: linear-gradient(135deg, var(--primary-color), #FF8E53);
-            color: white;
-            text-align: center;
-            padding: 40px 20px;
-            border-bottom-left-radius: 50px;
-            border-bottom-right-radius: 50px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             overflow: hidden;
         }
 
-        header h1 {
-            font-size: 2.5em;
-            margin: 0;
-            text-shadow: 3px 3px 0px rgba(0,0,0,0.2);
-        }
-
-        header p {
-            font-size: 1.2em;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        /* 主要內容容器 */
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        /* 互動流程圖區域 */
-        .timeline-section {
+        /* 投影片容器 */
+        .slide-container {
+            width: 90%;
+            max-width: 900px;
+            height: 85vh;
+            background: var(--light);
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            border: 5px solid var(--secondary);
         }
 
-        .step-card {
-            background: white;
-            border: 3px solid var(--secondary-color);
-            border-radius: 20px;
+        /* 進度條 */
+        .progress-bar {
+            height: 10px;
+            background: #ddd;
+            width: 100%;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* 單張投影片內容 */
+        .slide {
+            flex: 1;
+            padding: 40px;
+            display: none; /* 預設隱藏 */
+            flex-direction: column;
+            justify-content: center; /* 垂直置中 */
+            align-items: center;
+            text-align: center;
+            animation: fadeIn 0.5s;
+            overflow-y: auto; /* 內容太多可滾動 */
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { font-size: 2.5em; color: var(--primary); margin-bottom: 20px; }
+        h2 { font-size: 2em; color: var(--dark); margin-bottom: 15px; }
+        p { font-size: 1.2em; color: #555; line-height: 1.8; max-width: 700px; }
+
+        /* 案例專用的卡片風格 */
+        .case-study {
+            background: #fff3cd;
+            border-left: 8px solid var(--accent);
             padding: 20px;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .step-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
-            border-color: var(--primary-color);
-        }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .step-title {
-            font-size: 1.5em;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .step-icon {
-            background: var(--accent-color);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5em;
-            border: 2px solid var(--dark-text);
-        }
-
-        /* 隱藏的詳細內容 */
-        .step-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
-            margin-top: 0;
-            opacity: 0;
-            border-top: 2px dashed #eee;
-        }
-
-        .step-card.active .step-content {
-            max-height: 500px; /* 足夠大的數值 */
-            margin-top: 20px;
-            padding-top: 15px;
-            opacity: 1;
-        }
-
-        .step-card.active {
-            background-color: #fff9f0;
-        }
-
-        .highlight-box {
-            background-color: #e3f2fd;
-            padding: 10px;
             border-radius: 10px;
-            margin-top: 10px;
-            font-size: 0.9em;
-            color: #1565c0;
+            margin: 20px 0;
+            text-align: left;
+            width: 100%;
+            max-width: 600px;
         }
-
-        /* 素養提問投影片風格 */
-        .literacy-slide {
-            background: #2C3E50;
+        
+        .case-badge {
+            background: var(--primary);
             color: white;
-            border-radius: 30px;
-            padding: 40px;
-            margin-top: 60px;
-            position: relative;
-            box-shadow: 10px 10px 0px var(--secondary-color);
-        }
-
-        .literacy-slide::before {
-            content: "🧠 公民思考時間";
-            position: absolute;
-            top: -20px;
-            left: 30px;
-            background: var(--primary-color);
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
-        }
-
-        .scenario-box {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
+            padding: 5px 10px;
             border-radius: 15px;
-            margin-bottom: 20px;
-            border-left: 5px solid var(--accent-color);
-        }
-
-        .question-card {
-            background: white;
-            color: var(--dark-text);
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 15px;
-        }
-
-        .question-title {
+            font-size: 0.8em;
             font-weight: bold;
-            color: var(--primary-color);
             margin-bottom: 10px;
-            display: block;
+            display: inline-block;
         }
 
-        /* 按鈕 */
-        .toggle-btn {
-            background: none;
+        /* 圖像 Emoji */
+        .huge-icon { font-size: 5em; margin-bottom: 20px; display: block; }
+
+        /* 控制按鈕區 */
+        .controls {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.9);
+            border-top: 1px solid #ddd;
+        }
+
+        button {
+            background: var(--dark);
+            color: white;
             border: none;
-            font-size: 2em;
-            color: var(--secondary-color);
-            transition: transform 0.3s;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            font-family: inherit;
         }
 
-        .step-card.active .toggle-btn {
-            transform: rotate(180deg);
+        button:hover { transform: scale(1.05); }
+        button:active { transform: scale(0.95); }
+        button.btn-next { background: var(--primary); }
+        button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* 重點強調 */
+        .highlight {
+            color: #d32f2f;
+            font-weight: bold;
+            background: rgba(255, 107, 107, 0.1);
+            padding: 2px 5px;
         }
 
-        footer {
-            text-align: center;
-            padding: 40px;
-            font-size: 0.9em;
-            color: #888;
+        /* 比較表格風格 */
+        .comparison-table {
+            width: 100%;
+            max-width: 700px;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
         }
-
-        /* 浮動提示 */
-        .instruction {
-            text-align: center;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
+        .comparison-table th, .comparison-table td {
+            border: 2px solid var(--secondary);
+            padding: 15px;
+            text-align: left;
         }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-10px);}
-            60% {transform: translateY(-5px);}
+        .comparison-table th {
+            background: var(--secondary);
+            color: white;
         }
 
     </style>
 </head>
 <body>
 
-<header>
-    <h1>📜 法案大冒險</h1>
-    <p>從草案到法律：一場立法院的通關傳說</p>
-</header>
+<div class="slide-container">
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
 
-<div class="container">
-
-    <div class="instruction">
-        👇 點擊下方的卡片，解鎖每一個關卡！ 👇
+    <div class="slide active">
+        <span class="huge-icon">🏫</span>
+        <h1>公民課堂：法案大冒險</h1>
+        <p>今天我們要用一個「超具體」的例子，<br>帶你跑一次立法院的通關流程！</p>
+        <p style="margin-top:30px; color: var(--secondary); font-weight:bold;">包含「副署」與「覆議」的大解密！</p>
     </div>
 
-    <div class="timeline-section">
-        <div class="step-card" onclick="toggleStep(this)">
-            <div class="step-header">
-                <div class="step-title">
-                    <div class="step-icon">💡</div>
-                    提案 (Start)
-                </div>
-                <button class="toggle-btn">▼</button>
-            </div>
-            <div class="step-content">
-                <p>一切的開始！誰可以提出法案呢？</p>
-                <ul>
-                    <li><strong>行政院</strong>：政府覺得需要新法律。</li>
-                    <li><strong>立法委員</strong>：至少 15 人連署，或黨團提案。</li>
-                    <li><strong>其他單位</strong>：如司法院、考試院、監察院。</li>
-                </ul>
-                <div class="highlight-box">
-                    🤓 <strong>冷知識：</strong> 民眾也可以透過「公共政策網路參與平臺」提點子，雖然不能直接立法，但能給政府壓力喔！
-                </div>
-            </div>
+    <div class="slide">
+        <span class="huge-icon">🥤</span>
+        <h2>案例：高中生飲料半價法</h2>
+        <p>為了解釋流程，我們假設有一個新法案：</p>
+        <div class="case-study">
+            <span class="case-badge">法案內容</span>
+            <p><strong>第1條：</strong> 凡持有高中學生證者，購買手搖飲一律半價。</p>
+            <p><strong>第2條：</strong> 價差由教育部編列預算補貼。</p>
         </div>
-
-        <div class="step-card" onclick="toggleStep(this)">
-            <div class="step-header">
-                <div class="step-title">
-                    <div class="step-icon">🚪</div>
-                    程序委員會 (Gatekeeper)
-                </div>
-                <button class="toggle-btn">▼</button>
-            </div>
-            <div class="step-content">
-                <p>這裡是立法院的「傳達室兼管理員」。</p>
-                <p>他們決定這個法案能不能進入正式的會議議程。如果這裡被擋下來，法案就會胎死腹中，連討論的機會都沒有！</p>
-            </div>
-        </div>
-
-        <div class="step-card" onclick="toggleStep(this)">
-            <div class="step-header">
-                <div class="step-title">
-                    <div class="step-icon">1️⃣</div>
-                    一讀 (First Reading)
-                </div>
-                <button class="toggle-btn">▼</button>
-            </div>
-            <div class="step-content">
-                <p><strong>動作：</strong> 朗讀標題。</p>
-                <p>主席會在院會中讀出法案的名字。這時候有三種命運：</p>
-                <ol>
-                    <li>送去<strong>委員會</strong>審查（最常見）。</li>
-                    <li>逕付二讀（跳過委員會，超速通關，通常是有爭議或急迫的案子）。</li>
-                    <li>退回程序委員會（被打槍）。</li>
-                </ol>
-            </div>
-        </div>
-
-        <div class="step-card" onclick="toggleStep(this)">
-            <div class="step-header">
-                <div class="step-title">
-                    <div class="step-icon">🔍</div>
-                    委員會審查 (The Meat)
-                </div>
-                <button class="toggle-btn">▼</button>
-            </div>
-            <div class="step-content">
-                <p>這是最關鍵的戰場！立法院有內政、外交國防、教育文化等 8 個委員會。</p>
-                <p>委員們會在這裡逐條討論、邀請官員備詢、舉辦公聽會。法案會被修修改改，甚至在這裡就被「冷凍」。</p>
-                <div class="highlight-box">
-                    🤝 <strong>黨團協商：</strong> 如果委員會吵翻天沒共識，就會進入「黨團協商」，由各黨派代表私下或公開談判，這被稱為立法院的深水區。
-                </div>
-            </div>
-        </div>
-
-        <div class="step-card" onclick="toggleStep(this)">
-            <div class="step-header">
-                <div class="step-title">
-                    <div class="step-icon">2️⃣</div>
-                    二讀 (Second Reading)
-                </div>
-                <button class="toggle-btn">▼</button>
-            </div>
-            <div class="step-content">
-                <p>回到大會（院會）討論。</p>
-                <p>會將委員會的結果拿出來，一條一條朗讀、討論。這時候如果還有不同意見，就會進行<strong>表決</strong>！</p>
-                <p>這是法案定型的關鍵時刻。</p>
-            </div>
-        </div>
-
-        <div class="step-card" onclick="toggleStep(this)">
-            <div class="step-header">
-                <div class="step-title">
-                    <div class="step-icon">3️⃣</div>
-                    三讀 (Final Vote)
-                </div>
-                <button class="toggle-btn">▼</button>
-            </div>
-            <div class="step-content">
-                <p>最後一關！</p>
-                <p>這時候通常只能修正錯別字或邏輯錯誤，不能再大幅修改內容了。全體委員進行最終投票。</p>
-                <p><strong>敲槌！🎉 通過！</strong></p>
-            </div>
-        </div>
-
-        <div class="step-card" onclick="toggleStep(this)">
-            <div class="step-header">
-                <div class="step-title">
-                    <div class="step-icon">📢</div>
-                    總統公布 (Official)
-                </div>
-                <button class="toggle-btn">▼</button>
-            </div>
-            <div class="step-content">
-                <p>立法院通過後，移送給總統。</p>
-                <p>總統要在 10 日內公布，法律在公布後的第 3 天正式生效！</p>
-                <div class="highlight-box">
-                    ⚖️ <strong>覆議：</strong> 如果行政院覺得這法律窒礙難行，經總統核可，可以移請立法院「覆議」（Reconsider），這是行政權對立法權的制衡喔！
-                </div>
-            </div>
-        </div>
+        <p>聽起來很棒對吧？但這個法案要變成真的法律，沒那麼簡單...</p>
     </div>
 
-    <div class="literacy-slide">
-        <h2>🤔 思考時間：如果我們想修法...</h2>
+    <div class="slide">
+        <span class="huge-icon">📝</span>
+        <h2>第一關：提案與排隊</h2>
+        <div class="case-study">
+            <span class="case-badge">飲料法案進度</span>
+            <p>熱愛珍奶的<strong>「甜點黨」立委</strong>寫好了草案。但一個人說了不算！</p>
+        </div>
+        <ul style="text-align:left; max-width:600px;">
+            <li><strong>連署 (Co-signing)</strong>：這位立委需要找其他立委簽名，湊滿 <strong>15人</strong> 才能成案。(如果是黨團提案就不用這麼多人)</li>
+            <li><strong>程序委員會</strong>：他們是「守門員」。如果他們覺得這個法案太荒謬（例如國家會破產），可能在這裡就擋掉，不排入議程。</li>
+        </ul>
+    </div>
+
+    <div class="slide">
+        <span class="huge-icon">🔍</span>
+        <h2>第二關：委員會大戰</h2>
+        <p><strong>一讀</strong>只是在大會唸過標題，真正的戰場在<strong>「委員會」</strong>。</p>
+        <div class="case-study">
+            <span class="case-badge">飲料法案進度</span>
+            <p>法案被送去<strong>「教育文化委員會」</strong>審查。</p>
+            <p>😡 <strong>反方：</strong>教育部官員表示「沒錢補貼！預算會爆炸！」</p>
+            <p>😍 <strong>正方：</strong>學生代表在公聽會表示「喝糖補充腦力！」</p>
+        </div>
+        <p>最後可能<strong>妥協</strong>：改成「每週五半價」，才送出委員會。</p>
+    </div>
+
+    <div class="slide">
+        <span class="huge-icon">🔨</span>
+        <h2>第三關：二讀與三讀</h2>
+        <p><strong>二讀 (最重要)</strong>：把委員會改好的版本，拿到大會逐條討論、表決。這是法案定型的時刻。</p>
+        <p><strong>三讀 (形式)</strong>：只能改錯字，全體投票。敲槌通過！🎉</p>
+        <div class="case-study">
+            <span class="case-badge">飲料法案進度</span>
+            <p>立法院長敲槌：「高中生飲料半價法（週五限定版），修正通過！」</p>
+        </div>
+        <p>但等等...還沒生效喔！</p>
+    </div>
+
+    <div class="slide">
+        <span class="huge-icon">✍️</span>
+        <h2>關鍵知識：公布與副署</h2>
+        <p>法案通過後，會送給總統公布。這時會發生一件很重要的事：</p>
+        <div style="background: white; padding: 20px; border-radius: 15px; border: 2px dashed var(--primary);">
+            <h3>憲法第 37 條</h3>
+            <p>總統依法公布法律...須經<strong>行政院院長之副署</strong>。</p>
+        </div>
+        <p style="margin-top:20px;">這就是所謂的<strong>「副署制度」 (Countersignature)</strong>。</p>
+    </div>
+
+    <div class="slide">
+        <span class="huge-icon">🛑</span>
+        <h2>🤔 素養提問：如果不副署？</h2>
+        <p>假設行政院長覺得「飲料法」太荒謬，拒絕簽名（拒絕副署），會怎樣？</p>
         
-        <div class="scenario-box">
-            <h3>情境模擬：高中生延後上學法案</h3>
-            <p>假設有一個法案提議：<strong>「全台高中上學時間延後至 9:30，廢除早自習。」</strong></p>
-            <p>這項法案深受學生歡迎，但部分家長擔心接送問題，老師則擔心授課時數不足。</p>
-        </div>
-
-        <div class="question-card">
-            <span class="question-title">Q1. 程序的必要性：</span>
-            <p>既然學生都贊成，為什麼不能跳過「委員會審查」直接三讀通過就好？在委員會中邀請家長代表和老師代表開「公聽會」有什麼民主意義？</p>
-        </div>
-
-        <div class="question-card">
-            <span class="question-title">Q2. 協商的藝術：</span>
-            <p>如果法案在委員會卡住了（學生要 9:30，家長堅持 7:30），進入「黨團協商」後，折衷成 8:30。你認為這樣的折衷是民主的勝利，還是原則的退讓？為什麼？</p>
-        </div>
-        
-        <div style="text-align: right; margin-top: 20px; font-size: 0.8em; opacity: 0.8;">
-            (試著和旁邊的同學討論看看吧！)
+        <div class="case-study" style="background: #ffecf0; border-color: var(--primary);">
+            <h3>💥 後果分析</h3>
+            <ol>
+                <li><strong>法律無效</strong>：沒有行政院長副署，總統的公布令在程序上不完整，法律無法生效。</li>
+                <li><strong>憲政危機</strong>：在內閣制精神下，行政院長要對立法院負責。如果院長抗命不簽，通常代表他要<strong>辭職下台</strong>以示負責。</li>
+                <li><strong>唯一解方「覆議」</strong>：如果不想辭職也不想簽，院長必須在10天內提「覆議」(退回去重審)。如果覆議失敗（立法院維持原案），院長就必須接受並副署。</li>
+            </ol>
         </div>
     </div>
 
+    <div class="slide">
+        <span class="huge-icon">⚖️</span>
+        <h2>最後釐清：連署 vs 副署</h2>
+        <p>這兩個詞很像，但發生時間點完全不同！</p>
+        <table class="comparison-table">
+            <tr>
+                <th>項目</th>
+                <th>連署 (Co-signing)</th>
+                <th>副署 (Countersignature)</th>
+            </tr>
+            <tr>
+                <td><strong>時間點</strong></td>
+                <td>法案<strong>剛開始</strong> (提案時)</td>
+                <td>法案<strong>結束後</strong> (公布時)</td>
+            </tr>
+            <tr>
+                <td><strong>主角</strong></td>
+                <td>立法委員</td>
+                <td>行政院院長</td>
+            </tr>
+            <tr>
+                <td><strong>如果沒有...</strong></td>
+                <td>提案失敗，無法成案</td>
+                <td>法律無效 / 政治風暴</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="slide">
+        <span class="huge-icon">🎉</span>
+        <h2>恭喜完成法案大冒險！</h2>
+        <p>從「飲料半價法」的想像，到嚴肅的憲法「副署」問題，你已經掌握了立法程序的核心精神。</p>
+        <p>民主就是一個充滿溝通、妥協與制衡的過程。</p>
+        <button onclick="location.reload()" style="margin-top:20px; background: var(--secondary);">🔄 再看一次</button>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="changeSlide(-1)">⬅️ 上一頁</button>
+        <span id="page-indicator" style="align-self: center; font-weight: bold; color: #888;">1 / 9</span>
+        <button id="nextBtn" class="btn-next" onclick="changeSlide(1)">下一頁 ➡️</button>
+    </div>
 </div>
 
-<footer>
-    Designed for High School Civics Class | Taiwan Legislative Process
-</footer>
-
 <script>
-    function toggleStep(element) {
-        // 關閉其他已打開的卡片 (手風琴效果)
-        /* const allCards = document.querySelectorAll('.step-card');
-        allCards.forEach(card => {
-            if (card !== element) {
-                card.classList.remove('active');
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const progressBar = document.getElementById('progress');
+    const pageIndicator = document.getElementById('page-indicator');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function updateUI() {
+        // 更新投影片顯示
+        slides.forEach((slide, index) => {
+            if (index === currentSlide) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
             }
         });
-        */
-        
-        // 切換當前卡片
-        element.classList.toggle('active');
+
+        // 更新進度條
+        const progressPercentage = ((currentSlide + 1) / totalSlides) * 100;
+        progressBar.style.width = `${progressPercentage}%`;
+
+        // 更新頁碼
+        pageIndicator.innerText = `${currentSlide + 1} / ${totalSlides}`;
+
+        // 更新按鈕狀態
+        prevBtn.disabled = currentSlide === 0;
+        if (currentSlide === totalSlides - 1) {
+            nextBtn.style.display = 'none'; // 最後一頁隱藏下一頁
+        } else {
+            nextBtn.style.display = 'block';
+            nextBtn.disabled = false;
+        }
     }
+
+    function changeSlide(direction) {
+        currentSlide += direction;
+        
+        // 邊界檢查
+        if (currentSlide < 0) currentSlide = 0;
+        if (currentSlide >= totalSlides) currentSlide = totalSlides - 1;
+
+        updateUI();
+    }
+
+    // 初始化
+    updateUI();
 </script>
 
 </body>
